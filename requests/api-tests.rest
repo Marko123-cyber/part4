@@ -1,0 +1,60 @@
+@baseUrl = http://localhost:3001/api
+
+### 1. Create a new user
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "name": "Test User",
+  "password": "testpassword123"
+}
+
+### 2. Login and get token
+# @name login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "testpassword123"
+}
+
+### 3. Get all blogs
+GET {{baseUrl}}/blogs
+
+### 4. Create a new blog (requires auth)
+# @name createBlog
+POST {{baseUrl}}/blogs
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "title": "My First Blog Post",
+  "author": "Test Author",
+  "url": "http://example.com/first-post",
+  "likes": 5
+}
+
+### 5. Get a specific blog
+GET {{baseUrl}}/blogs/{{createBlog.response.body.id}}
+
+### 6. Update a blog (requires auth)
+PUT {{baseUrl}}/blogs/{{createBlog.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "title": "Updated Blog Title",
+  "likes": 10
+}
+
+### 7. Delete a blog (requires auth)
+DELETE {{baseUrl}}/blogs/{{createBlog.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### 8. Get all users
+GET {{baseUrl}}/users
+
+### 9. Get a specific user
+GET {{baseUrl}}/users/1
